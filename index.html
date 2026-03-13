@@ -175,6 +175,25 @@ nav {
   50% { opacity: 1; }
 }
 
+/* ── BACK TO TOP ── */
+#back-to-top {
+  position: fixed;
+  bottom: 2.5rem; right: 2.5rem;
+  z-index: 200;
+  font-size: 0.7rem; font-weight: 700;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--c2); text-decoration: none;
+  display: flex; flex-direction: column; align-items: center; gap: 0.8rem;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+#back-to-top.visible { opacity: 1; pointer-events: all; }
+.top-arrow {
+  width: 1px; height: 60px;
+  background: linear-gradient(to top, var(--c2), transparent);
+  animation: scrollPulse 2s ease infinite;
+}
+
 /* ── COLOR STRIP ── */
 .color-strip { display: flex; height: 4px; }
 .color-strip span { flex: 1; }
@@ -309,23 +328,61 @@ nav {
 /* ── FOOTER ── */
 footer { border-top: 1px solid var(--border); padding: 2rem 3rem; display: flex; justify-content: space-between; align-items: center; font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem; color: rgba(255,255,255,0.2); letter-spacing: 0.1em; }
 
+/* ── HAMBURGER ── */
+.hamburger {
+  display: none;
+  flex-direction: column; gap: 6px;
+  cursor: none; padding: 4px; z-index: 1001;
+}
+.hamburger span {
+  display: block; height: 2px;
+  transition: all 0.3s ease;
+}
+.hamburger span:nth-child(1) { width: 28px; background: var(--c1); }
+.hamburger span:nth-child(2) { width: 20px; background: var(--c2); }
+.hamburger span:nth-child(3) { width: 24px; background: var(--c3); }
+.hamburger.open span:nth-child(1) { width: 24px; transform: translateY(8px) rotate(45deg); background: var(--c1); }
+.hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+.hamburger.open span:nth-child(3) { width: 24px; transform: translateY(-8px) rotate(-45deg); background: var(--c3); }
+
+.mobile-menu {
+  display: none;
+  position: fixed; inset: 0;
+  background: var(--bg);
+  z-index: 999;
+  flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 2.5rem;
+}
+.mobile-menu.open { display: flex; }
+.mobile-menu a {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 3rem; letter-spacing: 0.05em;
+  color: var(--fg); text-decoration: none;
+  transition: color 0.2s;
+}
+.mobile-menu a:hover { color: var(--c1); }
+
 /* ── RESPONSIVE ── */
 @media (max-width: 900px) {
   nav { padding: 1.2rem 2rem; }
   .nav-links { display: none; }
+  .hamburger { display: flex; }
   #hero { padding: 0 2rem 2rem; }
   .section { padding: 5rem 2rem; }
   #zkusenosti .inner { padding: 0 2rem; }
   .proj-grid { grid-template-columns: 1fr 1fr; }
   .skills-grid { grid-template-columns: 1fr; gap: 3rem; }
-  .edu-block { grid-template-columns: 1fr; gap: 1rem; }
   footer { flex-direction: column; gap: 1rem; padding: 2rem; }
+  #back-to-top { bottom: 1.5rem; right: 1.5rem; }
 }
 @media (max-width: 600px) {
   .proj-grid { grid-template-columns: 1fr; }
   .hero-bottom { flex-direction: column; gap: 2rem; }
   .contact-links { flex-direction: column; align-items: center; }
   .exp-desc { padding: 0 0 2rem 0; }
+  .exp-header { flex-wrap: wrap; gap: 0.5rem; }
+  .exp-role { display: none; }
 }
 </style>
 </head>
@@ -333,6 +390,11 @@ footer { border-top: 1px solid var(--border); padding: 2rem 3rem; display: flex;
 
 <div id="cursor"></div>
 <div id="cursor-trail"></div>
+
+<a href="#" id="back-to-top">
+  <div class="top-arrow"></div>
+  Nahoru
+</a>
 
 <nav id="main-nav">
   <a href="#" class="nav-logo">VC</a>
@@ -343,7 +405,18 @@ footer { border-top: 1px solid var(--border); padding: 2rem 3rem; display: flex;
     <li><a href="#dovednosti">Dovednosti</a></li>
     <li><a href="#kontakt">Kontakt</a></li>
   </ul>
+  <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
 </nav>
+
+<div class="mobile-menu" id="mobile-menu">
+  <a href="#vzdelani" onclick="toggleMenu()">Vzdělání</a>
+  <a href="#zkusenosti" onclick="toggleMenu()">Zkušenosti</a>
+  <a href="#projekty" onclick="toggleMenu()">Projekty</a>
+  <a href="#dovednosti" onclick="toggleMenu()">Dovednosti</a>
+  <a href="#kontakt" onclick="toggleMenu()">Kontakt</a>
+</div>
 
 <!-- HERO -->
 <div id="hero">
@@ -520,7 +593,7 @@ footer { border-top: 1px solid var(--border); padding: 2rem 3rem; display: flex;
   <div>
     <h2 class="contact-title">Pojďme<em>tvořit.</em></h2>
     <div class="contact-links">
-      <a href="mailto:vita.charvat@gmail.com" class="contact-link">✉ vita.charvat@gmail.com</a>
+      <a href="/cdn-cgi/l/email-protection#14627d60753a777c7566627560547379757d783a777b79" class="contact-link">✉ <span class="__cf_email__" data-cfemail="d0a6b9a4b1feb3b8b1a2a6b1a490b7bdb1b9bcfeb3bfbd">[email&#160;protected]</span></a>
       <a href="tel:+420773987881" class="contact-link">☎ +420 773 987 881</a>
       <a href="https://www.linkedin.com/in/vitezslavcharvat/" target="_blank" class="contact-link">in LinkedIn</a>
     </div>
@@ -532,7 +605,13 @@ footer { border-top: 1px solid var(--border); padding: 2rem 3rem; display: flex;
   <span>Brno · CZ</span>
 </footer>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+// ── HAMBURGER ──
+function toggleMenu() {
+  document.getElementById('hamburger').classList.toggle('open');
+  document.getElementById('mobile-menu').classList.toggle('open');
+}
+
 // ── CURSOR ──
 const cursor = document.getElementById('cursor');
 const trail = document.getElementById('cursor-trail');
@@ -594,13 +673,15 @@ const expObs = new IntersectionObserver(entries => {
 const expList = document.querySelector('.exp-list');
 if (expList) expObs.observe(expList);
 
-// ── NAV + PARALLAX ──
+// ── NAV + PARALLAX + BACK TO TOP ──
 const nav = document.getElementById('main-nav');
 const hmarquee = document.getElementById('hmarquee');
+const backToTop = document.getElementById('back-to-top');
 window.addEventListener('scroll', () => {
   const y = window.scrollY;
   nav.style.padding = y > 60 ? '1rem 3rem' : '1.5rem 3rem';
   if (hmarquee) hmarquee.style.transform = `translateX(${y * 0.1}px)`;
+  backToTop.classList.toggle('visible', y > 400);
 });
 </script>
 </body>
