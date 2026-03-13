@@ -156,8 +156,22 @@ nav {
   margin-top: 2rem; position: relative; z-index: 1;
 }
 .hero-desc {
-  font-style: italic; font-size: 1rem;
-  color: var(--muted); max-width: 420px; line-height: 1.75;
+  font-style: italic; font-size: 1.05rem;
+  color: rgba(245,240,232,0.75); max-width: 460px; line-height: 1.85;
+  position: relative;
+  padding-left: 1.5rem;
+}
+.hero-desc::before {
+  content: '\201C';
+  position: absolute;
+  left: -1rem; top: -1.5rem;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 8rem;
+  line-height: 1;
+  color: var(--c1);
+  opacity: 0.35;
+  font-style: normal;
+  pointer-events: none;
 }
 .hero-scroll {
   font-size: 0.7rem; font-weight: 700;
@@ -247,27 +261,32 @@ nav {
 
 .exp-item {
   border-top: 1px solid var(--border);
+  padding: 1.4rem 0;
   opacity: 0; transform: translateX(-20px);
-  transition: opacity 0.5s ease, transform 0.5s ease;
+  transition: opacity 0.5s ease, transform 0.5s ease, padding-left 0.3s;
 }
 .exp-item.vis { opacity: 1; transform: none; }
+.exp-item:hover { padding-left: 0.8rem; }
 .exp-header {
-  display: flex; align-items: center; gap: 2rem;
-  padding: 1.8rem 0; cursor: none;
-  transition: padding-left 0.3s;
+  display: flex; align-items: baseline; gap: 1rem;
+  margin-bottom: 0.5rem;
 }
-.exp-header:hover { padding-left: 0.8rem; }
 .exp-period {
   font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.7rem; color: var(--c1); min-width: 120px; letter-spacing: 0.05em;
+  font-size: 0.7rem; color: var(--c1); min-width: 110px; letter-spacing: 0.05em; flex-shrink: 0;
 }
-.exp-company { font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; letter-spacing: 0.05em; flex: 1; }
-.exp-role { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; }
-.exp-toggle { font-size: 1.1rem; color: var(--muted); transition: transform 0.3s, color 0.3s; }
-.exp-item.open .exp-toggle { transform: rotate(180deg); color: var(--c1); }
-.exp-body { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; }
-.exp-item.open .exp-body { max-height: 200px; }
-.exp-desc { padding: 0 0 2rem 9rem; font-size: 0.9rem; line-height: 1.9; color: var(--muted); max-width: 650px; }
+.exp-company { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; letter-spacing: 0.05em; line-height: 1; }
+.exp-role {
+  font-size: 0.72rem; color: var(--accent2);
+  text-transform: uppercase; letter-spacing: 0.1em;
+  color: var(--c2); opacity: 0.7;
+  margin-left: auto; flex-shrink: 0;
+}
+.exp-desc {
+  font-size: 0.88rem; line-height: 1.8;
+  color: var(--muted); max-width: 650px;
+  padding-left: 7.5rem;
+}
 
 /* ── PROJEKTY ── */
 .proj-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
@@ -303,16 +322,13 @@ nav {
 .skills-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; }
 .skills-col h3 { font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--c2); margin-bottom: 2rem; }
 .skill-row {
-  display: flex; align-items: center; justify-content: space-between;
+  display: flex; align-items: center;
   padding: 0.9rem 0; border-bottom: 1px solid var(--border); font-size: 0.9rem;
   opacity: 0; transform: translateX(-15px);
   transition: opacity 0.4s ease, transform 0.4s ease, padding-left 0.3s, color 0.3s;
 }
 .skill-row.vis { opacity: 1; transform: none; }
 .skill-row:hover { padding-left: 0.5rem; color: var(--c2); }
-.skill-bar { width: 55px; height: 2px; background: rgba(255,255,255,0.08); position: relative; overflow: hidden; flex-shrink: 0; }
-.skill-bar-fill { position: absolute; left: 0; top: 0; bottom: 0; background: var(--c1); width: 0; transition: width 1.2s ease; }
-.skill-row.vis .skill-bar-fill { width: var(--w); }
 
 /* ── KONTAKT ── */
 #kontakt { min-height: 60vh; display: flex; align-items: center; justify-content: center; text-align: center; padding: 8rem 3rem; position: relative; overflow: hidden; }
@@ -363,6 +379,114 @@ footer { border-top: 1px solid var(--border); padding: 2rem 3rem; display: flex;
 }
 .mobile-menu a:hover { color: var(--c1); }
 
+/* ── PANÁČCI ── */
+.stickmen {
+  position: relative;
+  height: 85px;
+  margin: 1.5rem 0;
+  overflow: visible;
+  z-index: 1;
+}
+.stickmen .ground {
+  position: absolute;
+  bottom: 8px; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(255,255,255,0.06), transparent);
+}
+.cyclist-wrap {
+  position: absolute;
+  bottom: 6px;
+  transform: scale(0.55);
+  transform-origin: left bottom;
+  animation: cyclistMove 7s linear infinite;
+}
+@keyframes cyclistMove {
+  0%   { left: -120px; }
+  100% { left: 110%; }
+}
+.pedals {
+  transform-origin: 42px 48px;
+  animation: pedalSpin 0.5s linear infinite;
+}
+@keyframes pedalSpin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+.cyclist-body {
+  animation: cyclistBob 0.5s ease-in-out infinite alternate;
+  transform-origin: 40px 28px;
+}
+@keyframes cyclistBob {
+  from { transform: rotate(-2deg); }
+  to   { transform: rotate(2deg); }
+}
+.snowboarder-wrap {
+  position: absolute;
+  bottom: 6px;
+  right: -120px;
+  transform: scale(0.55);
+  transform-origin: right bottom;
+  animation: snowMove 9s linear 1s infinite;
+}
+@keyframes snowMove {
+  0%   { right: -120px; }
+  100% { right: 110%; }
+}
+.snowboarder-svg {
+  transform: scaleX(-1);
+  animation: snowBob 1s ease-in-out infinite alternate;
+}
+@keyframes snowBob {
+  from { transform: scaleX(-1) rotate(-3deg) translateY(0); }
+  to   { transform: scaleX(-1) rotate(3deg) translateY(-6px); }
+}
+.surfer-wrap {
+  position: absolute;
+  bottom: 6px;
+  transform: scale(0.55);
+  transform-origin: left bottom;
+  animation: surferMove 11s linear 3s infinite;
+}
+@keyframes surferMove {
+  0%   { left: -120px; }
+  100% { left: 110%; }
+}
+.surfer-svg {
+  animation: surferBob 1.4s ease-in-out infinite;
+}
+@keyframes surferBob {
+  0%, 100% { transform: translateY(0) rotate(-3deg); }
+  50%       { transform: translateY(-10px) rotate(3deg); }
+}
+.footballer-wrap {
+  position: absolute;
+  bottom: 6px;
+  left: 50%;
+  transform: translateX(-60px) scale(0.55);
+  transform-origin: left bottom;
+}
+.kick-leg {
+  transform-origin: 22px 52px;
+  animation: legKick 1.2s ease-in-out infinite;
+}
+@keyframes legKick {
+  0%, 100% { transform: rotate(0deg); }
+  30%       { transform: rotate(-38deg); }
+  55%       { transform: rotate(12deg); }
+}
+.football {
+  animation: ballArc 1.2s ease-in-out infinite;
+}
+@keyframes ballArc {
+  0%   { transform: translate(0px,  0px); }      /* u nohy */
+  20%  { transform: translate(30px, -45px); }     /* letí nahoru k C */
+  40%  { transform: translate(55px, -15px); }     /* dopad k C */
+  42%  { transform: translate(52px, -10px); }     /* odraz */
+  65%  { transform: translate(28px, -38px); }     /* letí zpět */
+  85%  { transform: translate(8px,  -18px); }     /* klesá */
+  100% { transform: translate(0px,   0px); }      /* zpět u nohy */
+}
+
 /* ── RESPONSIVE ── */
 @media (max-width: 900px) {
   nav { padding: 1.2rem 2rem; }
@@ -397,7 +521,7 @@ footer { border-top: 1px solid var(--border); padding: 2rem 3rem; display: flex;
 </a>
 
 <nav id="main-nav">
-  <a href="#" class="nav-logo">VC</a>
+  <a href="#" class="nav-logo">VCH</a>
   <ul class="nav-links">
     <li><a href="#vzdelani">Vzdělání</a></li>
     <li><a href="#zkusenosti">Zkušenosti</a></li>
@@ -439,11 +563,105 @@ footer { border-top: 1px solid var(--border); padding: 2rem 3rem; display: flex;
   </div>
 
   <div class="hero-bottom">
-    <p class="hero-desc">Nadšenec pro marketing, kreativitu a obsah, který nezapadne. Cítím se dobře v pohybu — na kole, ve světě i v projektech.</p>
+    <p class="hero-desc">Nadšenec pro marketing, kreativitu a&nbsp;obsah, který nezapadne. Cítím se dobře v&nbsp;pohybu — na kole, ve světě i&nbsp;v&nbsp;projektech.</p>
     <a href="#vzdelani" class="hero-scroll">
       Dolů
       <div class="scroll-arrow"></div>
     </a>
+  </div>
+
+  <!-- PANÁČCI -->
+  <div class="stickmen">
+    <div class="ground"></div>
+
+    <!-- CYCLIST -->
+    <div class="cyclist-wrap">
+      <svg width="90" height="75" viewBox="0 0 90 75" overflow="visible">
+        <circle cx="18" cy="56" r="16" fill="none" stroke="#ff3c00" stroke-width="2.5"/>
+        <circle cx="18" cy="56" r="3"  fill="#ff3c00"/>
+        <circle cx="66" cy="56" r="16" fill="none" stroke="#ff3c00" stroke-width="2.5"/>
+        <circle cx="66" cy="56" r="3"  fill="#ff3c00"/>
+        <line x1="18" y1="56" x2="42" y2="36" stroke="#ffe600" stroke-width="2"/>
+        <line x1="42" y1="36" x2="66" y2="56" stroke="#ffe600" stroke-width="2"/>
+        <line x1="30" y1="56" x2="42" y2="36" stroke="#ffe600" stroke-width="2"/>
+        <line x1="40" y1="36" x2="40" y2="28" stroke="#ffe600" stroke-width="2"/>
+        <line x1="36" y1="28" x2="44" y2="28" stroke="#ffe600" stroke-width="2"/>
+        <line x1="60" y1="36" x2="60" y2="28" stroke="#ffe600" stroke-width="2"/>
+        <line x1="56" y1="28" x2="64" y2="28" stroke="#ffe600" stroke-width="2"/>
+        <line x1="60" y1="36" x2="66" y2="56" stroke="#ffe600" stroke-width="1.5"/>
+        <g class="pedals">
+          <line x1="42" y1="44" x2="42" y2="52" stroke="#ffe600" stroke-width="2"/>
+          <circle cx="42" cy="44" r="2.5" fill="#ff3c00"/>
+          <circle cx="42" cy="52" r="2.5" fill="#ff3c00"/>
+        </g>
+        <g class="cyclist-body">
+          <line x1="40" y1="28" x2="50" y2="14" stroke="#f5f0e8" stroke-width="2.5"/>
+          <circle cx="50" cy="7"  r="7"  fill="none" stroke="#f5f0e8" stroke-width="2.5"/>
+          <line x1="48" y1="18" x2="60" y2="26" stroke="#f5f0e8" stroke-width="2.5"/>
+          <line x1="40" y1="28" x2="42" y2="44" stroke="#f5f0e8" stroke-width="2.5"/>
+          <line x1="40" y1="28" x2="42" y2="52" stroke="#f5f0e8" stroke-width="2.5"/>
+        </g>
+      </svg>
+    </div>
+
+    <!-- SNOWBOARDER -->
+    <div class="snowboarder-wrap">
+      <svg class="snowboarder-svg" width="80" height="75" viewBox="0 0 80 75" overflow="visible">
+        <rect x="4" y="60" width="72" height="5" rx="2.5" fill="#00e5ff"/>
+        <line x1="30" y1="60" x2="30" y2="50" stroke="#f5f0e8" stroke-width="2.5"/>
+        <line x1="50" y1="60" x2="50" y2="50" stroke="#f5f0e8" stroke-width="2.5"/>
+        <line x1="30" y1="50" x2="40" y2="30" stroke="#f5f0e8" stroke-width="2.5"/>
+        <line x1="50" y1="50" x2="40" y2="30" stroke="#f5f0e8" stroke-width="2.5"/>
+        <circle cx="40" cy="23" r="7" fill="none" stroke="#f5f0e8" stroke-width="2.5"/>
+        <line x1="40" y1="34" x2="18" y2="40" stroke="#f5f0e8" stroke-width="2.5"/>
+        <line x1="40" y1="34" x2="62" y2="40" stroke="#f5f0e8" stroke-width="2.5"/>
+      </svg>
+    </div>
+
+    <!-- SURFER -->
+    <div class="surfer-wrap">
+      <svg class="surfer-svg" width="100" height="75" viewBox="0 0 100 75" overflow="visible">
+        <path d="M0 68 Q25 54 50 68 Q75 80 100 68" fill="none" stroke="#00e5ff" stroke-width="1.5" opacity="0.35"/>
+        <ellipse cx="50" cy="63" rx="42" ry="5" fill="none" stroke="#ffe600" stroke-width="2"/>
+        <line x1="40" y1="59" x2="38" y2="48" stroke="#f5f0e8" stroke-width="2.5"/>
+        <line x1="60" y1="59" x2="62" y2="48" stroke="#f5f0e8" stroke-width="2.5"/>
+        <line x1="38" y1="48" x2="50" y2="28" stroke="#f5f0e8" stroke-width="2.5"/>
+        <line x1="62" y1="48" x2="50" y2="28" stroke="#f5f0e8" stroke-width="2.5"/>
+        <circle cx="50" cy="21" r="7" fill="none" stroke="#f5f0e8" stroke-width="2.5"/>
+        <line x1="50" y1="34" x2="22" y2="30" stroke="#f5f0e8" stroke-width="2.5"/>
+        <line x1="50" y1="34" x2="78" y2="30" stroke="#f5f0e8" stroke-width="2.5"/>
+      </svg>
+    </div>
+
+
+    <!-- CURRICULUM VITAE — samostatně mimo scale -->
+    <div style="position:absolute; bottom:6px; left:50%; transform:translateX(-28px); pointer-events:none;">
+      <svg width="500" height="75" viewBox="0 0 500 75" overflow="visible">
+        <text x="0" y="68" font-family="'Bebas Neue', sans-serif" font-size="68"
+          fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1.5">CURRICULUM VITAE</text>
+      </svg>
+    </div>
+
+    <!-- FOOTBALLER -->
+    <div class="footballer-wrap">
+      <svg width="400" height="85" viewBox="0 0 400 85" overflow="visible">
+        <!-- panáček vlevo od textu -->
+        <line x1="22" y1="70" x2="22" y2="52" stroke="#f5f0e8" stroke-width="2.5"/>
+        <g class="kick-leg">
+          <line x1="22" y1="52" x2="38" y2="64" stroke="#ffe600" stroke-width="2.5"/>
+        </g>
+        <line x1="22" y1="52" x2="22" y2="28" stroke="#f5f0e8" stroke-width="2.5"/>
+        <circle cx="22" cy="21" r="7" fill="none" stroke="#f5f0e8" stroke-width="2.5"/>
+        <line x1="22" y1="36" x2="8"  y2="46" stroke="#f5f0e8" stroke-width="2.5"/>
+        <line x1="22" y1="36" x2="36" y2="44" stroke="#f5f0e8" stroke-width="2.5"/>
+        <!-- míč letí doprava k C a odráží se zpět -->
+        <g class="football">
+          <circle cx="38" cy="74" r="7" fill="none" stroke="#ff3c00" stroke-width="2"/>
+          <line x1="38" y1="67" x2="38" y2="81" stroke="#ff3c00" stroke-width="1" opacity="0.4"/>
+          <line x1="31" y1="74" x2="45" y2="74" stroke="#ff3c00" stroke-width="1" opacity="0.4"/>
+        </g>
+      </svg>
+    </div>
   </div>
 </div>
 
@@ -475,67 +693,67 @@ footer { border-top: 1px solid var(--border); padding: 2rem 3rem; display: flex;
     </div>
     <div class="exp-list">
       <div class="exp-item">
-        <div class="exp-header" onclick="toggleExp(this)">
+        <div class="exp-header">
           <span class="exp-period">2023 — nyní</span>
           <span class="exp-company">AFGroup, a.s.</span>
           <span class="exp-role">Vedoucí marketingu</span>
-          <span class="exp-toggle">↓</span>
+          
         </div>
-        <div class="exp-body"><p class="exp-desc">Vedení marketingového oddělení nejprve pro jednu z firem, následně po reorganizaci přechod k širokému portfoliu firem s velkým záběrem operativních činností.</p></div>
+        <p class="exp-desc">Vedení marketingového oddělení nejprve pro jednu z&nbsp;firem, následně po reorganizaci přechod k&nbsp;širokému portfoliu firem s&nbsp;velkým záběrem operativních činností.</p>
       </div>
       <div class="exp-item">
-        <div class="exp-header" onclick="toggleExp(this)">
+        <div class="exp-header">
           <span class="exp-period">2022 — 2023</span>
           <span class="exp-company">Media Age, s.r.o.</span>
           <span class="exp-role">Senior Account Manager</span>
-          <span class="exp-toggle">↓</span>
+          
         </div>
-        <div class="exp-body"><p class="exp-desc">Projektové řízení marketingových kampaní a jejich reportování, vedení kreativního a realizačního týmu. Komunikace s klienty a upselling.</p></div>
+        <p class="exp-desc">Projektové řízení marketingových kampaní a&nbsp;jejich reportování, vedení kreativního a&nbsp;realizačního týmu. Komunikace s&nbsp;klienty a&nbsp;upselling.</p>
       </div>
       <div class="exp-item">
-        <div class="exp-header" onclick="toggleExp(this)">
+        <div class="exp-header">
           <span class="exp-period">2021 — 2022</span>
           <span class="exp-company">Divadlo Radost</span>
           <span class="exp-role">Marketing a PR Manažer</span>
-          <span class="exp-toggle">↓</span>
+          
         </div>
-        <div class="exp-body"><p class="exp-desc">Plánování, tvorba a realizace marketingových a PR kampaní. Zavedení marketingu a PR jako takového. Implementace JVS. Produkce.</p></div>
+        <p class="exp-desc">Plánování, tvorba a&nbsp;realizace marketingových a&nbsp;PR kampaní. Zavedení marketingu a&nbsp;PR jako takového. Implementace JVS. Produkce.</p>
       </div>
       <div class="exp-item">
-        <div class="exp-header" onclick="toggleExp(this)">
+        <div class="exp-header">
           <span class="exp-period">2019</span>
           <span class="exp-company">jsmeROJ, s.r.o.</span>
           <span class="exp-role">Founder</span>
-          <span class="exp-toggle">↓</span>
+          
         </div>
-        <div class="exp-body"><p class="exp-desc">Založení a vedení vlastní agentury. Kreativa, plánování, tvorba a realizace marketingových strategií v oblasti digitálního marketingu.</p></div>
+        <p class="exp-desc">Založení a&nbsp;vedení vlastní agentury. Kreativa, plánování, tvorba a&nbsp;realizace marketingových strategií v&nbsp;oblasti digitálního marketingu.</p>
       </div>
       <div class="exp-item">
-        <div class="exp-header" onclick="toggleExp(this)">
+        <div class="exp-header">
           <span class="exp-period">2018 — 2022</span>
           <span class="exp-company">StageArtCZ, s.r.o.</span>
           <span class="exp-role">Výkonný obchodní manažer</span>
-          <span class="exp-toggle">↓</span>
+          
         </div>
-        <div class="exp-body"><p class="exp-desc">Plánování, tvorba a realizace marketingových a PR kampaní, obchodní zastoupení, fundraising, online marketing, správa sociálních sítí.</p></div>
+        <p class="exp-desc">Plánování, tvorba a&nbsp;realizace marketingových a&nbsp;PR kampaní, obchodní zastoupení, fundraising, online marketing, správa sociálních sítí.</p>
       </div>
       <div class="exp-item">
-        <div class="exp-header" onclick="toggleExp(this)">
+        <div class="exp-header">
           <span class="exp-period">2015 — 2018</span>
           <span class="exp-company">Národní divadlo Brno</span>
           <span class="exp-role">Marketing a PR Činohry</span>
-          <span class="exp-toggle">↓</span>
+          
         </div>
-        <div class="exp-body"><p class="exp-desc">Plánování, tvorba a realizace marketingových a PR kampaní pro prestižní kulturní instituci.</p></div>
+        <p class="exp-desc">Plánování, tvorba a&nbsp;realizace marketingových a&nbsp;PR kampaní pro prestižní kulturní instituci.</p>
       </div>
       <div class="exp-item">
-        <div class="exp-header" onclick="toggleExp(this)">
+        <div class="exp-header">
           <span class="exp-period">2014 — 2015</span>
           <span class="exp-company">JazzFest / JAMU / Digi Sport</span>
           <span class="exp-role">Marketing & Produkce</span>
-          <span class="exp-toggle">↓</span>
+          
         </div>
-        <div class="exp-body"><p class="exp-desc">Produkce eventů a koncertů, outdoorové PR kampaně, realizace webových stránek a korporátní identity, B2B marketing pro CZ trh.</p></div>
+        <p class="exp-desc">Produkce eventů a&nbsp;koncertů, outdoorové PR kampaně, realizace webových stránek a&nbsp;korporátní identity, B2B marketing pro CZ trh.</p>
       </div>
     </div>
   </div>
@@ -568,21 +786,21 @@ footer { border-top: 1px solid var(--border); padding: 2rem 3rem; display: flex;
   <div class="skills-grid">
     <div class="skills-col">
       <h3>Soft Skills</h3>
-      <div class="skill-row" style="--w:95%"><span>Strategické myšlení</span><div class="skill-bar"><div class="skill-bar-fill"></div></div></div>
-      <div class="skill-row" style="--w:90%"><span>Kreativní myšlení & brand</span><div class="skill-bar"><div class="skill-bar-fill"></div></div></div>
-      <div class="skill-row" style="--w:92%"><span>Komunikační dovednosti</span><div class="skill-bar"><div class="skill-bar-fill"></div></div></div>
-      <div class="skill-row" style="--w:88%"><span>Leadership & týmová práce</span><div class="skill-bar"><div class="skill-bar-fill"></div></div></div>
-      <div class="skill-row" style="--w:85%"><span>Organizovanost & prioritizace</span><div class="skill-bar"><div class="skill-bar-fill"></div></div></div>
-      <div class="skill-row" style="--w:90%"><span>Flexibilita & adaptace</span><div class="skill-bar"><div class="skill-bar-fill"></div></div></div>
+      <div class="skill-row"><span>Strategické myšlení</span></div>
+      <div class="skill-row"><span>Kreativní myšlení & brand</span></div>
+      <div class="skill-row"><span>Komunikační dovednosti</span></div>
+      <div class="skill-row"><span>Leadership & týmová práce</span></div>
+      <div class="skill-row"><span>Organizovanost & prioritizace</span></div>
+      <div class="skill-row"><span>Flexibilita & adaptace</span></div>
     </div>
     <div class="skills-col">
       <h3>Hard Skills</h3>
-      <div class="skill-row" style="--w:95%"><span>Brand Strategy & Marketing</span><div class="skill-bar"><div class="skill-bar-fill"></div></div></div>
-      <div class="skill-row" style="--w:85%"><span>Meta Ads & Google Ads</span><div class="skill-bar"><div class="skill-bar-fill"></div></div></div>
-      <div class="skill-row" style="--w:88%"><span>Affinity Designer · Adobe · Canva</span><div class="skill-bar"><div class="skill-bar-fill"></div></div></div>
-      <div class="skill-row" style="--w:90%"><span>Projektový management</span><div class="skill-bar"><div class="skill-bar-fill"></div></div></div>
-      <div class="skill-row" style="--w:80%"><span>Marketingová analytika & KPI</span><div class="skill-bar"><div class="skill-bar-fill"></div></div></div>
-      <div class="skill-row" style="--w:75%"><span>Drone Operator</span><div class="skill-bar"><div class="skill-bar-fill"></div></div></div>
+      <div class="skill-row"><span>Brand Strategy & Marketing</span></div>
+      <div class="skill-row"><span>Meta Ads & Google Ads</span></div>
+      <div class="skill-row"><span>Affinity Designer · Adobe · Canva</span></div>
+      <div class="skill-row"><span>Projektový management</span></div>
+      <div class="skill-row"><span>Marketingová analytika & KPI</span></div>
+      <div class="skill-row"><span>Drone Operator</span></div>
     </div>
   </div>
 </section>
@@ -643,14 +861,6 @@ document.querySelectorAll('a, .proj-card, .exp-header, .skill-row, .tag').forEac
   el.addEventListener('mouseenter', () => document.body.classList.add('cur-big'));
   el.addEventListener('mouseleave', () => document.body.classList.remove('cur-big'));
 });
-
-// ── ACCORDION ──
-function toggleExp(header) {
-  const item = header.closest('.exp-item');
-  const wasOpen = item.classList.contains('open');
-  document.querySelectorAll('.exp-item.open').forEach(i => i.classList.remove('open'));
-  if (!wasOpen) item.classList.add('open');
-}
 
 // ── SCROLL REVEAL ──
 const revealObs = new IntersectionObserver(entries => {
