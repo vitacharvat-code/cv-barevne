@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MgA. Vítězslav Charvát</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;700;800&family=IBM+Plex+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+:root {
+  --bg: #0a0a0a;
+  --fg: #f5f0e8;
+  --c1: #ff3c00;
+  --c2: #ffe600;
+  --c3: #00e5ff;
+  --c4: #b400ff;
+  --c5: #00ff87;
+  --muted: rgba(245,240,232,0.45);
+  --border: rgba(255,255,255,0.08);
+}
+
+body {
+  cursor: none;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: 'Syne', sans-serif;
+  overflow-x: hidden;
+}
+
+/* ── CURSOR ── */
+#cursor {
+  position: fixed;
+  width: 10px; height: 10px;
+  background: var(--c2);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99999;
+  left: 0; top: 0;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: width 0.2s, height 0.2s, opacity 0.3s;
+}
+#cursor-trail {
+  position: fixed;
+  width: 36px; height: 36px;
+  border: 1px solid var(--c1);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99998;
+  left: 0; top: 0;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: width 0.3s, height 0.3s, opacity 0.3s;
+}
+body.cur-big #cursor { width: 6px; height: 6px; }
+body.cur-big #cursor-trail { width: 55px; height: 55px; }
+
+::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--c1); }
+
+/* ── NAV ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 1.5rem 3rem;
+  mix-blend-mode: difference;
+  transition: padding 0.3s;
+}
+.nav-logo {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.4rem; letter-spacing: 0.05em;
+  color: var(--fg); text-decoration: none;
+}
+.nav-links { display: flex; gap: 2rem; list-style: none; }
+.nav-links a {
+  font-size: 0.7rem; font-weight: 700;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--fg); text-decoration: none;
+  opacity: 0.5; transition: opacity 0.2s;
+}
+.nav-links a:hover { opacity: 1; }
+
+/* ── HERO ── */
+#hero {
+  min-height: 100vh;
+  display: flex; flex-direction: column; justify-content: flex-end;
+  padding: 0 3rem 3rem;
+  position: relative; overflow: hidden;
+}
+
+.hero-marquee-wrap {
+  position: absolute; top: 50%; left: 0; right: 0;
+  transform: translateY(-50%);
+  overflow: hidden; pointer-events: none;
+}
+.hero-marquee {
+  display: flex; white-space: nowrap;
+  animation: marqueeAnim 12s linear infinite;
+}
+.hero-marquee span {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(8rem, 18vw, 16rem);
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(255,255,255,0.22);
+  padding-right: 2rem; line-height: 1;
+  user-select: none;
+}
+.hero-marquee span:nth-child(even) {
+  font-size: clamp(2rem, 4vw, 4rem);
+  -webkit-text-stroke: 1px rgba(255,255,255,0.15);
+  padding-right: 2rem;
+  vertical-align: middle;
+}
+@keyframes marqueeAnim {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.hero-tag-row {
+  display: flex; gap: 3rem;
+  margin-bottom: 1.5rem; flex-wrap: wrap;
+  position: relative; z-index: 1;
+}
+.tag {
+  font-size: 0.7rem; font-weight: 700;
+  letter-spacing: 0.15em; text-transform: uppercase;
+  padding: 0.45rem 1.1rem;
+  border: 1px solid currentColor;
+  transition: all 0.3s;
+}
+.tag:nth-child(1) { color: var(--c1); }
+.tag:nth-child(2) { color: var(--c2); }
+.tag:nth-child(3) { color: var(--c3); }
+.tag:hover { background: currentColor; color: var(--bg); }
+
+.hero-name-block { position: relative; z-index: 1; }
+.hero-firstname {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(4.5rem, 12vw, 12rem);
+  line-height: 0.9; color: var(--fg); display: block;
+}
+.hero-lastname {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(4.5rem, 12vw, 12rem);
+  line-height: 0.9;
+  color: transparent;
+  -webkit-text-stroke: 2px var(--fg);
+  display: block;
+}
+
+.hero-bottom {
+  display: flex; justify-content: space-between; align-items: flex-end;
+  margin-top: 2rem; position: relative; z-index: 1;
+}
+.hero-desc {
+  font-style: italic; font-size: 1rem;
+  color: var(--muted); max-width: 420px; line-height: 1.75;
+}
+.hero-scroll {
+  font-size: 0.7rem; font-weight: 700;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--c2); text-decoration: none;
+  display: flex; flex-direction: column; align-items: center; gap: 0.8rem;
+}
+.scroll-arrow {
+  width: 1px; height: 60px;
+  background: linear-gradient(to bottom, var(--c2), transparent);
+  animation: scrollPulse 2s ease infinite;
+}
+@keyframes scrollPulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+
+/* ── COLOR STRIP ── */
+.color-strip { display: flex; height: 4px; }
+.color-strip span { flex: 1; }
+.color-strip span:nth-child(1) { background: var(--c1); }
+.color-strip span:nth-child(2) { background: var(--c2); }
+.color-strip span:nth-child(3) { background: var(--c3); }
+.color-strip span:nth-child(4) { background: var(--c4); }
+.color-strip span:nth-child(5) { background: var(--c5); }
+
+/* ── SECTIONS ── */
+.section { padding: 7rem 3rem; max-width: 1200px; margin: 0 auto; }
+.section-header { display: flex; align-items: center; gap: 1.5rem; margin-bottom: 4rem; }
+.section-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.7rem; color: var(--c1); letter-spacing: 0.1em;
+}
+.section-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(2.5rem, 5vw, 4rem); letter-spacing: 0.05em;
+}
+.section-accent { flex: 1; height: 2px; }
+
+/* ── VZDĚLÁNÍ ── */
+.edu-block {
+  padding: 3rem 0;
+  border-bottom: 1px solid var(--border);
+  opacity: 0; transform: translateY(30px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.edu-block.vis { opacity: 1; transform: none; }
+.edu-subject {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(3rem, 7vw, 6rem);
+  color: var(--fg); line-height: 1; margin-bottom: 0.3rem;
+}
+.edu-school {
+  font-size: 1.2rem; font-weight: 700;
+  color: var(--muted); margin-bottom: 1rem;
+}
+.edu-badge {
+  display: inline-block;
+  padding: 0.3rem 0.8rem;
+  border: 1px solid var(--c1); color: var(--c1);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.7rem; letter-spacing: 0.15em;
+}
+
+/* ── ZKUŠENOSTI ── */
+#zkusenosti { padding: 0 0 7rem; }
+#zkusenosti .inner { max-width: 1200px; margin: 0 auto; padding: 0 3rem; }
+
+.exp-item {
+  border-top: 1px solid var(--border);
+  opacity: 0; transform: translateX(-20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.exp-item.vis { opacity: 1; transform: none; }
+.exp-header {
+  display: flex; align-items: center; gap: 2rem;
+  padding: 1.8rem 0; cursor: none;
+  transition: padding-left 0.3s;
+}
+.exp-header:hover { padding-left: 0.8rem; }
+.exp-period {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.7rem; color: var(--c1); min-width: 120px; letter-spacing: 0.05em;
+}
+.exp-company { font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; letter-spacing: 0.05em; flex: 1; }
+.exp-role { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; }
+.exp-toggle { font-size: 1.1rem; color: var(--muted); transition: transform 0.3s, color 0.3s; }
+.exp-item.open .exp-toggle { transform: rotate(180deg); color: var(--c1); }
+.exp-body { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; }
+.exp-item.open .exp-body { max-height: 200px; }
+.exp-desc { padding: 0 0 2rem 9rem; font-size: 0.9rem; line-height: 1.9; color: var(--muted); max-width: 650px; }
+
+/* ── PROJEKTY ── */
+.proj-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
+.proj-card {
+  aspect-ratio: 4/3; background: #111;
+  position: relative; overflow: hidden; cursor: none;
+  opacity: 0; transform: scale(0.95);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.proj-card.vis { opacity: 1; transform: scale(1); }
+.proj-card::after {
+  content: ''; position: absolute; inset: 0;
+  background: var(--c1);
+  transform: translateY(100%);
+  transition: transform 0.4s ease; z-index: 1;
+}
+.proj-card:nth-child(2)::after { background: var(--c2); }
+.proj-card:nth-child(3)::after { background: var(--c3); }
+.proj-card:nth-child(4)::after { background: var(--c4); }
+.proj-card:nth-child(5)::after { background: var(--c5); }
+.proj-card:hover::after { transform: translateY(0); }
+.proj-inner { position: absolute; inset: 0; z-index: 2; display: flex; flex-direction: column; justify-content: flex-end; padding: 2rem; }
+.proj-num-big { position: absolute; top: 1.5rem; right: 2rem; font-family: 'Bebas Neue', sans-serif; font-size: 5rem; color: rgba(255,255,255,0.05); line-height: 1; transition: color 0.3s; }
+.proj-card:hover .proj-num-big { color: rgba(0,0,0,0.12); }
+.proj-plus { width: 44px; height: 44px; border: 1px dashed rgba(255,255,255,0.15); display: flex; align-items: center; justify-content: center; font-size: 1.4rem; color: rgba(255,255,255,0.2); margin-bottom: auto; margin-top: 2rem; transition: all 0.3s; }
+.proj-card:hover .proj-plus { border-color: var(--bg); color: var(--bg); transform: rotate(45deg); }
+.proj-label { font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.3rem; transition: color 0.3s; }
+.proj-card:hover .proj-label { color: var(--bg); }
+.proj-name { font-weight: 800; font-size: 1rem; transition: color 0.3s; }
+.proj-card:hover .proj-name { color: var(--bg); }
+
+/* ── DOVEDNOSTI ── */
+.skills-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; }
+.skills-col h3 { font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--c2); margin-bottom: 2rem; }
+.skill-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0.9rem 0; border-bottom: 1px solid var(--border); font-size: 0.9rem;
+  opacity: 0; transform: translateX(-15px);
+  transition: opacity 0.4s ease, transform 0.4s ease, padding-left 0.3s, color 0.3s;
+}
+.skill-row.vis { opacity: 1; transform: none; }
+.skill-row:hover { padding-left: 0.5rem; color: var(--c2); }
+.skill-bar { width: 55px; height: 2px; background: rgba(255,255,255,0.08); position: relative; overflow: hidden; flex-shrink: 0; }
+.skill-bar-fill { position: absolute; left: 0; top: 0; bottom: 0; background: var(--c1); width: 0; transition: width 1.2s ease; }
+.skill-row.vis .skill-bar-fill { width: var(--w); }
+
+/* ── KONTAKT ── */
+#kontakt { min-height: 60vh; display: flex; align-items: center; justify-content: center; text-align: center; padding: 8rem 3rem; position: relative; overflow: hidden; }
+.contact-glow { position: absolute; inset: 0; background: radial-gradient(ellipse 50% 50% at 50% 50%, rgba(255,60,0,0.07), transparent); pointer-events: none; }
+.contact-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(4rem, 12vw, 10rem); line-height: 0.9; margin-bottom: 3rem; position: relative; z-index: 1; }
+.contact-title em { display: block; color: var(--c1); font-style: normal; }
+.contact-links { display: flex; justify-content: center; gap: 1.5rem; flex-wrap: wrap; position: relative; z-index: 1; }
+.contact-link { display: inline-flex; align-items: center; gap: 0.6rem; padding: 0.9rem 1.8rem; border: 1px solid rgba(255,255,255,0.15); color: var(--fg); text-decoration: none; font-family: 'IBM Plex Mono', monospace; font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase; position: relative; overflow: hidden; transition: color 0.3s, border-color 0.3s; }
+.contact-link::before { content: ''; position: absolute; inset: 0; background: var(--c1); transform: translateX(-100%); transition: transform 0.3s ease; z-index: -1; }
+.contact-link:hover::before { transform: translateX(0); }
+.contact-link:hover { color: var(--bg); border-color: var(--c1); }
+
+/* ── FOOTER ── */
+footer { border-top: 1px solid var(--border); padding: 2rem 3rem; display: flex; justify-content: space-between; align-items: center; font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem; color: rgba(255,255,255,0.2); letter-spacing: 0.1em; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  nav { padding: 1.2rem 2rem; }
+  .nav-links { display: none; }
+  #hero { padding: 0 2rem 2rem; }
+  .section { padding: 5rem 2rem; }
+  #zkusenosti .inner { padding: 0 2rem; }
+  .proj-grid { grid-template-columns: 1fr 1fr; }
+  .skills-grid { grid-template-columns: 1fr; gap: 3rem; }
+  .edu-block { grid-template-columns: 1fr; gap: 1rem; }
+  footer { flex-direction: column; gap: 1rem; padding: 2rem; }
+}
+@media (max-width: 600px) {
+  .proj-grid { grid-template-columns: 1fr; }
+  .hero-bottom { flex-direction: column; gap: 2rem; }
+  .contact-links { flex-direction: column; align-items: center; }
+  .exp-desc { padding: 0 0 2rem 0; }
+}
+</style>
+</head>
+<body>
+
+<div id="cursor"></div>
+<div id="cursor-trail"></div>
+
+<nav id="main-nav">
+  <a href="#" class="nav-logo">VC</a>
+  <ul class="nav-links">
+    <li><a href="#vzdelani">Vzdělání</a></li>
+    <li><a href="#zkusenosti">Zkušenosti</a></li>
+    <li><a href="#projekty">Projekty</a></li>
+    <li><a href="#dovednosti">Dovednosti</a></li>
+    <li><a href="#kontakt">Kontakt</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<div id="hero">
+  <div class="hero-marquee-wrap">
+    <div class="hero-marquee" id="hmarquee">
+      <span>MARKETING</span><span>✦</span><span>KREATIVITA</span><span>✦</span><span>BRAND</span><span>✦</span><span>ŽIVOT</span><span>✦</span><span>STRATEGIE</span><span>✦</span><span>PŘÍBĚH</span><span>✦</span><span>POHYB</span><span>✦</span><span>ENERGIE</span><span>✦</span>
+      <span>MARKETING</span><span>✦</span><span>KREATIVITA</span><span>✦</span><span>BRAND</span><span>✦</span><span>ŽIVOT</span><span>✦</span><span>STRATEGIE</span><span>✦</span><span>PŘÍBĚH</span><span>✦</span><span>POHYB</span><span>✦</span><span>ENERGIE</span><span>✦</span>
+    </div>
+  </div>
+
+  <div class="hero-tag-row">
+    <span class="tag">Marketing</span>
+    <span class="tag">Vizuální tvorba</span>
+    <span class="tag">Brand</span>
+  </div>
+
+  <div class="hero-name-block">
+    <span class="hero-firstname">MgA. Vítězslav</span>
+    <span class="hero-lastname">Charvát</span>
+  </div>
+
+  <div class="hero-bottom">
+    <p class="hero-desc">Nadšenec pro marketing, kreativitu a obsah, který nezapadne. Cítím se dobře v pohybu — na kole, ve světě i v projektech.</p>
+    <a href="#vzdelani" class="hero-scroll">
+      Dolů
+      <div class="scroll-arrow"></div>
+    </a>
+  </div>
+</div>
+
+<div class="color-strip">
+  <span></span><span></span><span></span><span></span><span></span>
+</div>
+
+<!-- VZDĚLÁNÍ -->
+<section class="section" id="vzdelani">
+  <div class="section-header">
+    <span class="section-num">01</span>
+    <h2 class="section-title">Vzdělání</h2>
+    <div class="section-accent" style="background:var(--c2)"></div>
+  </div>
+  <div class="edu-block">
+    <div class="edu-subject">Arts Management</div>
+    <div class="edu-school">Janáčkova akademie múzických umění, Brno</div>
+    <span class="edu-badge">Bc. (2012) → MgA. (2014)</span>
+  </div>
+</section>
+
+<!-- ZKUŠENOSTI -->
+<section id="zkusenosti">
+  <div class="inner">
+    <div class="section-header">
+      <span class="section-num">02</span>
+      <h2 class="section-title">Zkušenosti</h2>
+      <div class="section-accent" style="background:var(--c1)"></div>
+    </div>
+    <div class="exp-list">
+      <div class="exp-item">
+        <div class="exp-header" onclick="toggleExp(this)">
+          <span class="exp-period">2023 — nyní</span>
+          <span class="exp-company">AFGroup, a.s.</span>
+          <span class="exp-role">Vedoucí marketingu</span>
+          <span class="exp-toggle">↓</span>
+        </div>
+        <div class="exp-body"><p class="exp-desc">Vedení marketingového oddělení nejprve pro jednu z firem, následně po reorganizaci přechod k širokému portfoliu firem s velkým záběrem operativních činností.</p></div>
+      </div>
+      <div class="exp-item">
+        <div class="exp-header" onclick="toggleExp(this)">
+          <span class="exp-period">2022 — 2023</span>
+          <span class="exp-company">Media Age, s.r.o.</span>
+          <span class="exp-role">Senior Account Manager</span>
+          <span class="exp-toggle">↓</span>
+        </div>
+        <div class="exp-body"><p class="exp-desc">Projektové řízení marketingových kampaní a jejich reportování, vedení kreativního a realizačního týmu. Komunikace s klienty a upselling.</p></div>
+      </div>
+      <div class="exp-item">
+        <div class="exp-header" onclick="toggleExp(this)">
+          <span class="exp-period">2021 — 2022</span>
+          <span class="exp-company">Divadlo Radost</span>
+          <span class="exp-role">Marketing a PR Manažer</span>
+          <span class="exp-toggle">↓</span>
+        </div>
+        <div class="exp-body"><p class="exp-desc">Plánování, tvorba a realizace marketingových a PR kampaní. Zavedení marketingu a PR jako takového. Implementace JVS. Produkce.</p></div>
+      </div>
+      <div class="exp-item">
+        <div class="exp-header" onclick="toggleExp(this)">
+          <span class="exp-period">2019</span>
+          <span class="exp-company">jsmeROJ, s.r.o.</span>
+          <span class="exp-role">Founder</span>
+          <span class="exp-toggle">↓</span>
+        </div>
+        <div class="exp-body"><p class="exp-desc">Založení a vedení vlastní agentury. Kreativa, plánování, tvorba a realizace marketingových strategií v oblasti digitálního marketingu.</p></div>
+      </div>
+      <div class="exp-item">
+        <div class="exp-header" onclick="toggleExp(this)">
+          <span class="exp-period">2018 — 2022</span>
+          <span class="exp-company">StageArtCZ, s.r.o.</span>
+          <span class="exp-role">Výkonný obchodní manažer</span>
+          <span class="exp-toggle">↓</span>
+        </div>
+        <div class="exp-body"><p class="exp-desc">Plánování, tvorba a realizace marketingových a PR kampaní, obchodní zastoupení, fundraising, online marketing, správa sociálních sítí.</p></div>
+      </div>
+      <div class="exp-item">
+        <div class="exp-header" onclick="toggleExp(this)">
+          <span class="exp-period">2015 — 2018</span>
+          <span class="exp-company">Národní divadlo Brno</span>
+          <span class="exp-role">Marketing a PR Činohry</span>
+          <span class="exp-toggle">↓</span>
+        </div>
+        <div class="exp-body"><p class="exp-desc">Plánování, tvorba a realizace marketingových a PR kampaní pro prestižní kulturní instituci.</p></div>
+      </div>
+      <div class="exp-item">
+        <div class="exp-header" onclick="toggleExp(this)">
+          <span class="exp-period">2014 — 2015</span>
+          <span class="exp-company">JazzFest / JAMU / Digi Sport</span>
+          <span class="exp-role">Marketing & Produkce</span>
+          <span class="exp-toggle">↓</span>
+        </div>
+        <div class="exp-body"><p class="exp-desc">Produkce eventů a koncertů, outdoorové PR kampaně, realizace webových stránek a korporátní identity, B2B marketing pro CZ trh.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJEKTY -->
+<section class="section" id="projekty">
+  <div class="section-header">
+    <span class="section-num">03</span>
+    <h2 class="section-title">Projekty</h2>
+    <div class="section-accent" style="background:var(--c3)"></div>
+  </div>
+  <div class="proj-grid">
+    <div class="proj-card"><div class="proj-inner"><div class="proj-num-big">01</div><div class="proj-plus">+</div><div class="proj-label">Projekt</div><div class="proj-name">Připravujeme</div></div></div>
+    <div class="proj-card"><div class="proj-inner"><div class="proj-num-big">02</div><div class="proj-plus">+</div><div class="proj-label">Projekt</div><div class="proj-name">Připravujeme</div></div></div>
+    <div class="proj-card"><div class="proj-inner"><div class="proj-num-big">03</div><div class="proj-plus">+</div><div class="proj-label">Projekt</div><div class="proj-name">Připravujeme</div></div></div>
+    <div class="proj-card"><div class="proj-inner"><div class="proj-num-big">04</div><div class="proj-plus">+</div><div class="proj-label">Projekt</div><div class="proj-name">Připravujeme</div></div></div>
+    <div class="proj-card"><div class="proj-inner"><div class="proj-num-big">05</div><div class="proj-plus">+</div><div class="proj-label">Projekt</div><div class="proj-name">Připravujeme</div></div></div>
+    <div class="proj-card"><div class="proj-inner"><div class="proj-num-big">06</div><div class="proj-plus">+</div><div class="proj-label">Projekt</div><div class="proj-name">Připravujeme</div></div></div>
+  </div>
+</section>
+
+<!-- DOVEDNOSTI -->
+<section class="section" id="dovednosti">
+  <div class="section-header">
+    <span class="section-num">04</span>
+    <h2 class="section-title">Dovednosti</h2>
+    <div class="section-accent" style="background:var(--c4)"></div>
+  </div>
+  <div class="skills-grid">
+    <div class="skills-col">
+      <h3>Soft Skills</h3>
+      <div class="skill-row" style="--w:95%"><span>Strategické myšlení</span><div class="skill-bar"><div class="skill-bar-fill"></div></div></div>
+      <div class="skill-row" style="--w:90%"><span>Kreativní myšlení & brand</span><div class="skill-bar"><div class="skill-bar-fill"></div></div></div>
+      <div class="skill-row" style="--w:92%"><span>Komunikační dovednosti</span><div class="skill-bar"><div class="skill-bar-fill"></div></div></div>
+      <div class="skill-row" style="--w:88%"><span>Leadership & týmová práce</span><div class="skill-bar"><div class="skill-bar-fill"></div></div></div>
+      <div class="skill-row" style="--w:85%"><span>Organizovanost & prioritizace</span><div class="skill-bar"><div class="skill-bar-fill"></div></div></div>
+      <div class="skill-row" style="--w:90%"><span>Flexibilita & adaptace</span><div class="skill-bar"><div class="skill-bar-fill"></div></div></div>
+    </div>
+    <div class="skills-col">
+      <h3>Hard Skills</h3>
+      <div class="skill-row" style="--w:95%"><span>Brand Strategy & Marketing</span><div class="skill-bar"><div class="skill-bar-fill"></div></div></div>
+      <div class="skill-row" style="--w:85%"><span>Meta Ads & Google Ads</span><div class="skill-bar"><div class="skill-bar-fill"></div></div></div>
+      <div class="skill-row" style="--w:88%"><span>Affinity Designer · Adobe · Canva</span><div class="skill-bar"><div class="skill-bar-fill"></div></div></div>
+      <div class="skill-row" style="--w:90%"><span>Projektový management</span><div class="skill-bar"><div class="skill-bar-fill"></div></div></div>
+      <div class="skill-row" style="--w:80%"><span>Marketingová analytika & KPI</span><div class="skill-bar"><div class="skill-bar-fill"></div></div></div>
+      <div class="skill-row" style="--w:75%"><span>Drone Operator</span><div class="skill-bar"><div class="skill-bar-fill"></div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- KONTAKT -->
+<section id="kontakt">
+  <div class="contact-glow"></div>
+  <div>
+    <h2 class="contact-title">Pojďme<em>tvořit.</em></h2>
+    <div class="contact-links">
+      <a href="mailto:vita.charvat@gmail.com" class="contact-link">✉ vita.charvat@gmail.com</a>
+      <a href="tel:+420773987881" class="contact-link">☎ +420 773 987 881</a>
+      <a href="https://www.linkedin.com/in/vitezslavcharvat/" target="_blank" class="contact-link">in LinkedIn</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>© 2025 MgA. Vítězslav Charvát</span>
+  <span>Brno · CZ</span>
+</footer>
+
+<script>
+// ── CURSOR ──
+const cursor = document.getElementById('cursor');
+const trail = document.getElementById('cursor-trail');
+let mx = 0, my = 0, tx = 0, ty = 0;
+let cursorReady = false;
+
+document.addEventListener('mousemove', e => {
+  mx = e.clientX;
+  my = e.clientY;
+  cursor.style.left = mx + 'px';
+  cursor.style.top = my + 'px';
+  if (!cursorReady) {
+    cursorReady = true;
+    tx = mx; ty = my;
+    cursor.style.opacity = '1';
+    trail.style.opacity = '1';
+  }
+});
+
+(function loop() {
+  tx += (mx - tx) * 0.14;
+  ty += (my - ty) * 0.14;
+  trail.style.left = tx + 'px';
+  trail.style.top = ty + 'px';
+  requestAnimationFrame(loop);
+})();
+
+document.querySelectorAll('a, .proj-card, .exp-header, .skill-row, .tag').forEach(el => {
+  el.addEventListener('mouseenter', () => document.body.classList.add('cur-big'));
+  el.addEventListener('mouseleave', () => document.body.classList.remove('cur-big'));
+});
+
+// ── ACCORDION ──
+function toggleExp(header) {
+  const item = header.closest('.exp-item');
+  const wasOpen = item.classList.contains('open');
+  document.querySelectorAll('.exp-item.open').forEach(i => i.classList.remove('open'));
+  if (!wasOpen) item.classList.add('open');
+}
+
+// ── SCROLL REVEAL ──
+const revealObs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('vis'); });
+}, { threshold: 0.08 });
+
+document.querySelectorAll('.edu-block, .proj-card, .skill-row').forEach(el => revealObs.observe(el));
+
+const expObs = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.querySelectorAll('.exp-item').forEach((item, i) => {
+        setTimeout(() => item.classList.add('vis'), i * 70);
+      });
+      expObs.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.05 });
+
+const expList = document.querySelector('.exp-list');
+if (expList) expObs.observe(expList);
+
+// ── NAV + PARALLAX ──
+const nav = document.getElementById('main-nav');
+const hmarquee = document.getElementById('hmarquee');
+window.addEventListener('scroll', () => {
+  const y = window.scrollY;
+  nav.style.padding = y > 60 ? '1rem 3rem' : '1.5rem 3rem';
+  if (hmarquee) hmarquee.style.transform = `translateX(${y * 0.1}px)`;
+});
+</script>
+</body>
+</html>
