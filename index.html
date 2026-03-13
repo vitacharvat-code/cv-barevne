@@ -331,11 +331,11 @@ nav {
 .skill-row:hover { padding-left: 0.5rem; color: var(--c2); }
 
 /* ── KONTAKT ── */
-#kontakt { min-height: 60vh; display: flex; align-items: center; justify-content: center; padding: 8rem 3rem; position: relative; overflow: hidden; }
+#kontakt { min-height: 60vh; display: flex; align-items: center; justify-content: center; text-align: center; padding: 8rem 3rem; position: relative; overflow: hidden; }
 .contact-glow { position: absolute; inset: 0; background: radial-gradient(ellipse 50% 50% at 50% 50%, rgba(255,60,0,0.07), transparent); pointer-events: none; }
-.contact-inner { position: relative; z-index: 1; }
+.contact-inner { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; text-align: center; }
 .contact-title-row {
-  display: flex; align-items: flex-end; gap: 1.5rem;
+  display: inline-flex; align-items: flex-end; gap: 1.5rem;
   margin-bottom: 3rem;
 }
 .contact-title {
@@ -348,7 +348,7 @@ nav {
   height: calc(clamp(4rem, 12vw, 10rem) * 1.9);
   width: auto; flex-shrink: 0;
 }
-.contact-links { display: flex; gap: 1.5rem; flex-wrap: wrap; }
+.contact-links { display: flex; gap: 1.5rem; flex-wrap: wrap; justify-content: center; }
 .contact-link { display: inline-flex; align-items: center; gap: 0.6rem; padding: 0.9rem 1.8rem; border: 1px solid rgba(255,255,255,0.15); color: var(--fg); text-decoration: none; font-family: 'IBM Plex Mono', monospace; font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase; position: relative; overflow: hidden; transition: color 0.3s, border-color 0.3s; }
 .contact-link::before { content: ''; position: absolute; inset: 0; background: var(--c1); transform: translateX(-100%); transition: transform 0.3s ease; z-index: -1; }
 .contact-link:hover::before { transform: translateX(0); }
