@@ -456,6 +456,24 @@ nav {
 }
 .proj-modal-video:hover .proj-video-play { opacity: 1; transform: translateY(-2px); }
 
+.proj-video-play-big {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 70px; height: 70px;
+  background: rgba(255,60,0,0.9);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.5rem; color: white;
+  padding-left: 4px;
+  pointer-events: none;
+  transition: all 0.3s;
+}
+.proj-modal-video:hover .proj-video-play-big {
+  transform: translate(-50%, -50%) scale(1.1);
+  background: var(--c1);
+}
+
 .proj-modal-nav {
   position: absolute; top: 50%; transform: translateY(-50%);
   background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.15);
@@ -1255,10 +1273,10 @@ const projects = [
     title: 'Videoprodukce',
     desc: 'Spoluzakladatel agentury jsmeROJ specializované na videoprodukci s&nbsp;reklamním přesahem. Koncept, realizace včetně dronových záběrů, produkce, copywriting a&nbsp;branding — od nápadu po finální výstup.',
     slides: [
-      { type: 'video', embedUrl: 'https://www.youtube.com/embed/EDbbFzXUREA?si=5oTuQL4iP1VYfjmq', videoId: 'EDbbFzXUREA', text: '' },
-      { type: 'video', embedUrl: 'https://www.youtube.com/embed/2sIuted_g48?si=BZg1JWl6el0avp03', videoId: '2sIuted_g48', text: '' },
-      { type: 'video', embedUrl: 'https://www.youtube.com/embed/23-4BEkMnRE?si=kc36LJpPh3O67eqa', videoId: '23-4BEkMnRE', text: '' },
-      { type: 'video', embedUrl: 'https://www.youtube.com/embed/qYOPOwgR-6o?si=7OBliP1ifZNQG4NL', videoId: 'qYOPOwgR-6o', text: '' },
+      { type: 'videoembed', embedUrl: 'https://www.youtube.com/embed/EDbbFzXUREA?si=5oTuQL4iP1VYfjmq', videoId: 'EDbbFzXUREA' },
+      { type: 'videoembed', embedUrl: 'https://www.youtube.com/embed/2sIuted_g48?si=BZg1JWl6el0avp03', videoId: '2sIuted_g48' },
+      { type: 'videoembed', embedUrl: 'https://www.youtube.com/embed/23-4BEkMnRE?si=227clSbb3qwgL7to', videoId: '23-4BEkMnRE' },
+      { type: 'videoembed', embedUrl: 'https://www.youtube.com/embed/qYOPOwgR-6o?si=7OBliP1ifZNQG4ML', videoId: 'qYOPOwgR-6o' },
     ]
   },
   {
@@ -1299,7 +1317,23 @@ function openModal(index) {
     const div = document.createElement('div');
     div.className = 'proj-modal-slide' + (slide.type === 'placeholder' ? ' placeholder' : '');
 
-    if (slide.type === 'video') {
+    if (slide.type === 'videoembed') {
+      div.className = 'proj-modal-slide proj-modal-video';
+      // thumbnail — zkusíme maxres, fallback na hqdefault
+      const thumb = document.createElement('img');
+      thumb.src = `https://img.youtube.com/vi/${slide.videoId}/maxresdefault.jpg`;
+      thumb.onerror = () => { thumb.src = `https://img.youtube.com/vi/${slide.videoId}/hqdefault.jpg`; };
+      thumb.alt = '';
+      div.appendChild(thumb);
+      const playBtn = document.createElement('div');
+      playBtn.className = 'proj-video-play-big';
+      playBtn.innerHTML = '▶';
+      div.appendChild(playBtn);
+      div.style.cursor = 'none';
+      div.addEventListener('click', () => {
+        div.innerHTML = `<iframe src="${slide.embedUrl}&autoplay=1&rel=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen style="position:absolute;inset:0;width:100%;height:100%;"></iframe>`;
+      });
+    } else if (slide.type === 'video') {
       div.className = 'proj-modal-slide proj-modal-video';
       const thumb = document.createElement('img');
       thumb.src = `https://img.youtube.com/vi/${slide.videoId}/maxresdefault.jpg`;
