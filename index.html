@@ -437,6 +437,38 @@ nav {
 }
 .proj-modal-slide:hover a { opacity: 1; transform: translateY(-2px); }
 
+.proj-modal-video {
+  cursor: none;
+}
+.proj-video-play {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex; flex-direction: column; align-items: center; gap: 0.8rem;
+  text-decoration: none;
+}
+.proj-video-play::before {
+  content: '▶';
+  width: 70px; height: 70px;
+  background: rgba(255,60,0,0.9);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.5rem; color: white;
+  padding-left: 4px;
+  transition: all 0.3s;
+}
+.proj-video-play::after {
+  content: 'Přehrát na YouTube ↗';
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.65rem; letter-spacing: 0.1em;
+  color: rgba(255,255,255,0.6);
+  text-transform: uppercase;
+}
+.proj-modal-video:hover .proj-video-play::before {
+  transform: scale(1.1);
+  background: var(--c1);
+}
+
 .proj-modal-nav {
   position: absolute; top: 50%; transform: translateY(-50%);
   background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.15);
@@ -1030,9 +1062,9 @@ footer { border-top: 1px solid var(--border); padding: 2rem 3rem; display: flex;
       <div class="proj-inner">
         <div class="proj-num-big">03</div>
         <div class="proj-plus">+</div>
-        <div class="proj-label">Branding · jsmeROJ</div>
-        <div class="proj-name">Vizuální identita</div>
-        <div class="proj-tags"><span>Brand</span><span>Design</span><span>Strategie</span></div>
+        <div class="proj-label">Senior Account Manager · Media Age</div>
+        <div class="proj-name">Porotherm | Wienerberger</div>
+        <div class="proj-tags"><span>Kampaň</span><span>Produkce</span><span>Video</span></div>
       </div>
     </div>
 
@@ -1220,12 +1252,15 @@ const projects = [
     ]
   },
   {
-    label: 'Branding · jsmeROJ',
-    title: 'Vizuální identita',
-    desc: 'Tvorba vizuální identity a&nbsp;brand manuálu pro vlastní agenturu jsmeROJ.',
+    label: 'Senior Account Manager · Media Age',
+    title: 'Porotherm | Wienerberger',
+    desc: 'Řízení celé kampaně pro poradnecihly.cz — koordinace mezi klientem a&nbsp;týmem, nastavení rozpočtu, produkce focení, grafiky a&nbsp;videí.',
     slides: [
-      { type: 'placeholder', text: 'Logo & brand manuál' },
-      { type: 'placeholder', text: 'Aplikace identity' },
+      { type: 'image', src: 'wienerberger.jpg', text: 'Porotherm | Wienerberger' },
+      { type: 'video', embedUrl: 'https://www.youtube.com/embed/a8pDxAeaEso?si=SKOEl8W4TXzqh5zz', videoId: 'a8pDxAeaEso', text: 'Porotherm — video 1' },
+      { type: 'video', embedUrl: 'https://www.youtube.com/embed/XHNrP2xJHuA?si=aSM4Dxs8c67OBR4J', videoId: 'XHNrP2xJHuA', text: 'Porotherm — video 2' },
+      { type: 'video', embedUrl: 'https://www.youtube.com/embed/Ek7x2-hHUmM?si=l96nrbErHvz3xqIM', videoId: 'Ek7x2-hHUmM', text: 'Porotherm — video 3' },
+      { type: 'video', embedUrl: 'https://www.youtube.com/embed/Vb7P5VDQOcM?si=rAX_Em45ME1n3AUM', videoId: 'Vb7P5VDQOcM', text: 'Porotherm — video 4' },
     ]
   },
   {
@@ -1274,7 +1309,21 @@ function openModal(index) {
   p.slides.forEach(slide => {
     const div = document.createElement('div');
     div.className = 'proj-modal-slide' + (slide.type === 'placeholder' ? ' placeholder' : '');
-    if (slide.type === 'placeholder') {
+
+    if (slide.type === 'video') {
+      div.className = 'proj-modal-slide proj-modal-video';
+      const thumb = document.createElement('img');
+      thumb.src = `https://img.youtube.com/vi/${slide.videoId}/maxresdefault.jpg`;
+      thumb.alt = slide.text;
+      div.appendChild(thumb);
+      const playBtn = document.createElement('a');
+      playBtn.className = 'proj-video-play';
+      playBtn.innerHTML = '▶';
+      playBtn.href = `https://www.youtube.com/watch?v=${slide.videoId}`;
+      playBtn.target = '_blank';
+      playBtn.title = 'Přehrát na YouTube';
+      div.appendChild(playBtn);
+    } else if (slide.type === 'placeholder') {
       div.setAttribute('data-text', slide.text);
       const span = document.createElement('span');
       span.textContent = slide.text;
