@@ -330,20 +330,145 @@ nav {
 .skill-row.vis { opacity: 1; transform: none; }
 .skill-row:hover { padding-left: 0.5rem; color: var(--c2); }
 
+.proj-tags {
+  display: flex; gap: 0.4rem; flex-wrap: wrap; margin-top: 0.5rem;
+}
+.proj-tags span {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.6rem; letter-spacing: 0.1em;
+  padding: 0.2rem 0.5rem;
+  border: 1px solid rgba(255,255,255,0.15);
+  color: rgba(255,255,255,0.4);
+  transition: all 0.3s;
+}
+.proj-card:hover .proj-tags span { border-color: var(--bg); color: var(--bg); }
+
+/* ── MODAL ── */
+.proj-modal {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.92);
+  z-index: 2000;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.3s ease;
+  padding: 2rem;
+}
+.proj-modal.open { opacity: 1; pointer-events: all; }
+
+.proj-modal-inner {
+  background: #111;
+  width: 100%; max-width: 900px;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  transform: translateY(30px);
+  transition: transform 0.3s ease;
+}
+.proj-modal.open .proj-modal-inner { transform: translateY(0); }
+
+.proj-modal-close {
+  position: absolute; top: 1.5rem; right: 1.5rem;
+  background: none; border: 1px solid rgba(255,255,255,0.2);
+  color: var(--fg); font-size: 1.2rem;
+  width: 36px; height: 36px;
+  cursor: none; z-index: 10;
+  transition: all 0.3s;
+  display: flex; align-items: center; justify-content: center;
+}
+.proj-modal-close:hover { border-color: var(--c1); color: var(--c1); }
+
+.proj-modal-header { padding: 3rem 3rem 2rem; }
+.proj-modal-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.7rem; letter-spacing: 0.2em;
+  text-transform: uppercase; color: var(--c1);
+  margin-bottom: 0.5rem;
+}
+.proj-modal-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 3rem; letter-spacing: 0.05em;
+  margin-bottom: 1rem;
+}
+.proj-modal-desc {
+  font-size: 0.9rem; color: var(--muted); line-height: 1.8;
+}
+
+.proj-modal-gallery {
+  position: relative;
+  overflow: hidden;
+}
+.proj-modal-track {
+  display: flex;
+  transition: transform 0.5s ease;
+}
+.proj-modal-slide {
+  min-width: 100%;
+  aspect-ratio: 16/9;
+  background: #1a1a1a;
+  display: flex; align-items: center; justify-content: center;
+  position: relative; overflow: hidden;
+}
+.proj-modal-slide img {
+  width: 100%; height: 100%; object-fit: cover;
+}
+.proj-modal-slide.placeholder {
+  flex-direction: column; gap: 1rem;
+  color: rgba(255,255,255,0.2);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.75rem; letter-spacing: 0.15em;
+}
+.proj-modal-slide.placeholder::before {
+  content: '+';
+  font-size: 3rem; color: rgba(255,255,255,0.1);
+}
+.proj-modal-slide a {
+  position: absolute; inset: 0;
+  display: flex; align-items: flex-end;
+  padding: 1.5rem;
+  text-decoration: none;
+  background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+  color: var(--fg);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.7rem; letter-spacing: 0.1em;
+  opacity: 0; transition: opacity 0.3s;
+}
+.proj-modal-slide:hover a { opacity: 1; }
+
+.proj-modal-nav {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.15);
+  color: var(--fg); width: 44px; height: 44px;
+  cursor: none; font-size: 1rem;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.3s;
+}
+.proj-modal-nav:hover { border-color: var(--c1); color: var(--c1); }
+.proj-modal-prev { left: 1rem; }
+.proj-modal-next { right: 1rem; }
+.proj-modal-counter {
+  position: absolute; bottom: 1rem; right: 1.5rem;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.7rem; color: rgba(255,255,255,0.4);
+}
+
 /* ── DOPORUČENÍ ── */
 #doporuceni { padding: 7rem 3rem; max-width: 1200px; margin: 0 auto; }
 
 .testimonial-slider {
   position: relative;
   overflow: hidden;
+  width: 100%;
 }
 .testimonial-track {
   display: flex;
+  width: 100%;
   transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .testimonial-slide {
   min-width: 100%;
+  width: 100%;
   padding: 3rem 0;
+  box-sizing: border-box;
 }
 .testimonial-quote {
   font-family: 'Syne', sans-serif;
@@ -353,16 +478,19 @@ nav {
   color: rgba(245,240,232,0.85);
   max-width: 860px;
   position: relative;
-  padding-left: 2rem;
+  padding-top: 2rem;
+  z-index: 1;
 }
 .testimonial-quote::before {
   content: '\201C';
   position: absolute;
-  left: -1rem; top: -2rem;
+  left: 0; top: -1.5rem;
   font-family: 'Bebas Neue', sans-serif;
   font-size: 8rem; line-height: 1;
-  color: var(--c1); opacity: 0.25;
+  color: var(--c1); opacity: 0.35;
   font-style: normal;
+  pointer-events: none;
+  z-index: -1;
 }
 .testimonial-author {
   margin-top: 2rem;
@@ -447,86 +575,6 @@ footer { border-top: 1px solid var(--border); padding: 2rem 3rem; display: flex;
   white-space: nowrap;
   pointer-events: none;
   letter-spacing: 0.05em;
-}
-
-/* ── DOPORUČENÍ ── */
-#doporuceni { padding: 7rem 3rem; max-width: 900px; margin: 0 auto; }
-
-.testimonial-slider {
-  position: relative;
-  overflow: hidden;
-}
-.testimonial-track {
-  display: flex;
-  transition: transform 0.6s cubic-bezier(0.77, 0, 0.175, 1);
-}
-.testimonial-slide {
-  min-width: 100%;
-  padding: 0 1rem;
-}
-.testimonial-quote {
-  font-family: 'Syne', sans-serif;
-  font-size: clamp(1.1rem, 2.5vw, 1.5rem);
-  font-style: italic;
-  line-height: 1.8;
-  color: rgba(245,240,232,0.85);
-  margin-bottom: 2rem;
-  position: relative;
-  padding-left: 2rem;
-}
-.testimonial-quote::before {
-  content: '\201C';
-  position: absolute;
-  left: -1rem; top: -2rem;
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 8rem;
-  line-height: 1;
-  color: var(--c1);
-  opacity: 0.3;
-  font-style: normal;
-}
-.testimonial-author {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.75rem;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--c1);
-  padding-left: 2rem;
-}
-.testimonial-controls {
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-  margin-top: 3rem;
-  padding-left: 2rem;
-}
-.testimonial-btn {
-  background: none;
-  border: 1px solid rgba(255,255,255,0.15);
-  color: var(--fg);
-  width: 44px; height: 44px;
-  cursor: none;
-  font-size: 1rem;
-  transition: all 0.3s;
-  display: flex; align-items: center; justify-content: center;
-}
-.testimonial-btn:hover {
-  border-color: var(--c1);
-  color: var(--c1);
-}
-.testimonial-dots {
-  display: flex; gap: 0.5rem;
-}
-.testimonial-dot {
-  width: 6px; height: 6px;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.2);
-  cursor: none;
-  transition: background 0.3s, transform 0.3s;
-}
-.testimonial-dot.active {
-  background: var(--c1);
-  transform: scale(1.3);
 }
 
 /* ── HAMBURGER ── */
@@ -954,14 +1002,87 @@ footer { border-top: 1px solid var(--border); padding: 2rem 3rem; display: flex;
     <div class="section-accent" style="background:var(--c3)"></div>
   </div>
   <div class="proj-grid">
-    <div class="proj-card"><div class="proj-inner"><div class="proj-num-big">01</div><div class="proj-plus">+</div><div class="proj-label">Projekt</div><div class="proj-name">Připravujeme</div></div></div>
-    <div class="proj-card"><div class="proj-inner"><div class="proj-num-big">02</div><div class="proj-plus">+</div><div class="proj-label">Projekt</div><div class="proj-name">Připravujeme</div></div></div>
-    <div class="proj-card"><div class="proj-inner"><div class="proj-num-big">03</div><div class="proj-plus">+</div><div class="proj-label">Projekt</div><div class="proj-name">Připravujeme</div></div></div>
-    <div class="proj-card"><div class="proj-inner"><div class="proj-num-big">04</div><div class="proj-plus">+</div><div class="proj-label">Projekt</div><div class="proj-name">Připravujeme</div></div></div>
-    <div class="proj-card"><div class="proj-inner"><div class="proj-num-big">05</div><div class="proj-plus">+</div><div class="proj-label">Projekt</div><div class="proj-name">Připravujeme</div></div></div>
-    <div class="proj-card"><div class="proj-inner"><div class="proj-num-big">06</div><div class="proj-plus">+</div><div class="proj-label">Projekt</div><div class="proj-name">Připravujeme</div></div></div>
+
+    <div class="proj-card" onclick="openModal(0)">
+      <div class="proj-inner">
+        <div class="proj-num-big">01</div>
+        <div class="proj-plus">+</div>
+        <div class="proj-label">Kampaň · Národní divadlo Brno</div>
+        <div class="proj-name">#bezrozdílu</div>
+        <div class="proj-tags"><span>Produkce</span><span>Koncepce</span><span>Vedení týmu</span></div>
+      </div>
+    </div>
+
+    <div class="proj-card" onclick="openModal(1)">
+      <div class="proj-inner">
+        <div class="proj-num-big">02</div>
+        <div class="proj-plus">+</div>
+        <div class="proj-label">Web · StageArtCZ</div>
+        <div class="proj-name">Webové stránky</div>
+        <div class="proj-tags"><span>UX</span><span>Produkce</span><span>Copywriting</span></div>
+      </div>
+    </div>
+
+    <div class="proj-card" onclick="openModal(2)">
+      <div class="proj-inner">
+        <div class="proj-num-big">03</div>
+        <div class="proj-plus">+</div>
+        <div class="proj-label">Branding · jsmeROJ</div>
+        <div class="proj-name">Vizuální identita</div>
+        <div class="proj-tags"><span>Brand</span><span>Design</span><span>Strategie</span></div>
+      </div>
+    </div>
+
+    <div class="proj-card" onclick="openModal(3)">
+      <div class="proj-inner">
+        <div class="proj-num-big">04</div>
+        <div class="proj-plus">+</div>
+        <div class="proj-label">Kampaň · AFGroup</div>
+        <div class="proj-name">Online kampaň</div>
+        <div class="proj-tags"><span>Meta Ads</span><span>Google Ads</span><span>Analytika</span></div>
+      </div>
+    </div>
+
+    <div class="proj-card" onclick="openModal(4)">
+      <div class="proj-inner">
+        <div class="proj-num-big">05</div>
+        <div class="proj-plus">+</div>
+        <div class="proj-label">Event · Divadlo Radost</div>
+        <div class="proj-name">Sezónní kampaň</div>
+        <div class="proj-tags"><span>PR</span><span>Sociální sítě</span><span>Produkce</span></div>
+      </div>
+    </div>
+
+    <div class="proj-card" onclick="openModal(5)">
+      <div class="proj-inner">
+        <div class="proj-num-big">06</div>
+        <div class="proj-plus">+</div>
+        <div class="proj-label">Strategie · Media Age</div>
+        <div class="proj-name">Marketingová strategie</div>
+        <div class="proj-tags"><span>Strategie</span><span>Reporty</span><span>KPI</span></div>
+      </div>
+    </div>
+
   </div>
 </section>
+
+<!-- MODAL -->
+<div id="proj-modal" class="proj-modal" onclick="closeModal(event)">
+  <div class="proj-modal-inner">
+    <button class="proj-modal-close" onclick="closeModal()">&times;</button>
+    <div class="proj-modal-header">
+      <div class="proj-modal-label" id="modal-label"></div>
+      <h3 class="proj-modal-title" id="modal-title"></h3>
+      <div class="proj-modal-desc" id="modal-desc"></div>
+    </div>
+    <div class="proj-modal-gallery">
+      <div class="proj-modal-track" id="modal-track"></div>
+      <button class="proj-modal-nav proj-modal-prev" onclick="modalSlide(-1)">←</button>
+      <button class="proj-modal-nav proj-modal-next" onclick="modalSlide(1)">→</button>
+      <div class="proj-modal-counter"><span id="modal-current">1</span> / <span id="modal-total">3</span></div>
+    </div>
+  </div>
+</div>
 
 <!-- DOVEDNOSTI -->
 <section class="section" id="dovednosti">
@@ -1004,7 +1125,7 @@ footer { border-top: 1px solid var(--border); padding: 2rem 3rem; display: flex;
     <div class="testimonial-track" id="testimonial-track">
 
       <div class="testimonial-slide">
-        <p class="testimonial-quote">„Svou práci vykonával velmi zodpovědně, samostatně a&nbsp;s&nbsp;vysokým nasazením. Prokazoval výborné organizační schopnosti, spolehlivost a&nbsp;dobrý cit pro obchodní i&nbsp;komunikační stránku věci. Každému dalšímu zaměstnavateli ho můžeme s&nbsp;čistým svědomím doporučit."</p>
+        <p class="testimonial-quote">Svou práci vykonával velmi zodpovědně, samostatně a&nbsp;s&nbsp;vysokým nasazením. Prokazoval výborné organizační schopnosti, spolehlivost a&nbsp;dobrý cit pro obchodní i&nbsp;komunikační stránku věci. Každému dalšímu zaměstnavateli ho můžeme s&nbsp;čistým svědomím doporučit.</p>
         <div class="testimonial-author">
           <div class="testimonial-name">Petr Halberstadt</div>
           <div class="testimonial-role">CEO · StageArtCZ</div>
@@ -1012,18 +1133,10 @@ footer { border-top: 1px solid var(--border); padding: 2rem 3rem; display: flex;
       </div>
 
       <div class="testimonial-slide">
-        <p class="testimonial-quote">„Svou práci vykonával velmi zodpovědně, samostatně a&nbsp;s&nbsp;vysokým nasazením. Prokazoval výborné organizační schopnosti, spolehlivost a&nbsp;dobrý cit pro obchodní i&nbsp;komunikační stránku věci. Každému dalšímu zaměstnavateli ho můžeme s&nbsp;čistým svědomím doporučit."</p>
+        <p class="testimonial-quote">Světelný meč mezi marketingovými specialisty, maják naděje budoucnosti online strategií. Dobrman mezi pudly, rolls-royce mezi Daciemi. Chuck Norris sloganů, neutuchající gejzír nápadů s&nbsp;vrozenou indiánskou skromností.</p>
         <div class="testimonial-author">
-          <div class="testimonial-name">Petr Halberstadt</div>
-          <div class="testimonial-role">CEO · StageArtCZ</div>
-        </div>
-      </div>
-
-      <div class="testimonial-slide">
-        <p class="testimonial-quote">„Svou práci vykonával velmi zodpovědně, samostatně a&nbsp;s&nbsp;vysokým nasazením. Prokazoval výborné organizační schopnosti, spolehlivost a&nbsp;dobrý cit pro obchodní i&nbsp;komunikační stránku věci. Každému dalšímu zaměstnavateli ho můžeme s&nbsp;čistým svědomím doporučit."</p>
-        <div class="testimonial-author">
-          <div class="testimonial-name">Petr Halberstadt</div>
-          <div class="testimonial-role">CEO · StageArtCZ</div>
+          <div class="testimonial-name">Jakub Jíra</div>
+          <div class="testimonial-role">Spoluzakladatel · jsmeROJ</div>
         </div>
       </div>
 
@@ -1036,9 +1149,8 @@ footer { border-top: 1px solid var(--border); padding: 2rem 3rem; display: flex;
     <div class="testimonial-dots">
       <div class="testimonial-dot active" onclick="goToTestimonial(0)"></div>
       <div class="testimonial-dot" onclick="goToTestimonial(1)"></div>
-      <div class="testimonial-dot" onclick="goToTestimonial(2)"></div>
     </div>
-    <div class="testimonial-counter"><span id="t-current">1</span> / 3</div>
+    <div class="testimonial-counter"><span id="t-current">1</span> / 2</div>
   </div>
 </section>
 
@@ -1052,7 +1164,7 @@ footer { border-top: 1px solid var(--border); padding: 2rem 3rem; display: flex;
         <img src="panacek.png" alt="Vítězslav Charvát" class="contact-panacek"/>
       </div>
       <div class="contact-links">
-        <a href="mailto:vita.charvat@gmail.com" class="contact-link">✉ vita.charvat@gmail.com</a>
+        <a href="/cdn-cgi/l/email-protection#c0b6a9b4a1eea3a8a1b2b6a1b480a7ada1a9aceea3afad" class="contact-link">✉ <span class="__cf_email__" data-cfemail="05736c71642b666d6477736471456268646c692b666a68">[email&#160;protected]</span></a>
         <a href="tel:+420773987881" class="contact-link">☎ +420 773 987 881</a>
         <a href="https://www.linkedin.com/in/vitezslavcharvat/" target="_blank" class="contact-link">in LinkedIn</a>
       </div>
@@ -1071,26 +1183,164 @@ footer { border-top: 1px solid var(--border); padding: 2rem 3rem; display: flex;
   <span>Brno · CZ</span>
 </footer>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 // ── HAMBURGER ──
 function toggleMenu() {
   document.getElementById('hamburger').classList.toggle('open');
   document.getElementById('mobile-menu').classList.toggle('open');
 }
 
-// ── TESTIMONIAL SLIDER ──
-let testimonialCurrent = 0;
-const testimonialTotal = 3;
-const track = document.getElementById('testimonial-track');
-const dots = document.querySelectorAll('.testimonial-dot');
 
-function testimonialGo(index) {
-  testimonialCurrent = index;
-  track.style.transform = `translateX(-${index * 100}%)`;
-  dots.forEach((d, i) => d.classList.toggle('active', i === index));
+// ── PROJEKTY MODAL ──
+const projects = [
+  {
+    label: 'Kampaň · Národní divadlo Brno',
+    title: '#bezrozdílu',
+    desc: 'Produkce, koncepce a&nbsp;vedení týmu při realizaci kampaně #bezrozdílu pro Národní divadlo Brno.',
+    slides: [
+      { type: 'placeholder', text: 'Foto / vizuál kampaně' },
+      { type: 'placeholder', text: 'Foto / vizuál kampaně' },
+      { type: 'placeholder', text: 'Foto / vizuál kampaně' },
+    ]
+  },
+  {
+    label: 'Web · StageArtCZ',
+    title: 'Webové stránky',
+    desc: 'Kompletní zajištění nových webových stránek — od koncepce a&nbsp;UX po copywriting a&nbsp;spuštění.',
+    slides: [
+      { type: 'placeholder', text: 'Screenshot webu', url: 'https://stageartcz.cz' },
+      { type: 'placeholder', text: 'Screenshot webu' },
+    ]
+  },
+  {
+    label: 'Branding · jsmeROJ',
+    title: 'Vizuální identita',
+    desc: 'Tvorba vizuální identity a&nbsp;brand manuálu pro vlastní agenturu jsmeROJ.',
+    slides: [
+      { type: 'placeholder', text: 'Logo & brand manuál' },
+      { type: 'placeholder', text: 'Aplikace identity' },
+    ]
+  },
+  {
+    label: 'Kampaň · AFGroup',
+    title: 'Online kampaň',
+    desc: 'Plánování a&nbsp;realizace online kampaní v&nbsp;Meta Ads a&nbsp;Google Ads včetně reportingu a&nbsp;optimalizace.',
+    slides: [
+      { type: 'placeholder', text: 'Výsledky kampaně' },
+      { type: 'placeholder', text: 'Kreativy' },
+    ]
+  },
+  {
+    label: 'Event · Divadlo Radost',
+    title: 'Sezónní kampaň',
+    desc: 'PR a&nbsp;marketingová kampaň pro sezónní program Divadla Radost včetně správy sociálních sítí.',
+    slides: [
+      { type: 'placeholder', text: 'Vizuály kampaně' },
+      { type: 'placeholder', text: 'Sociální sítě' },
+    ]
+  },
+  {
+    label: 'Strategie · Media Age',
+    title: 'Marketingová strategie',
+    desc: 'Tvorba marketingové strategie, vedení kampaní a&nbsp;pravidelný reporting pro klienty agentury.',
+    slides: [
+      { type: 'placeholder', text: 'Strategie & prezentace' },
+      { type: 'placeholder', text: 'Výsledky & KPI' },
+    ]
+  },
+];
+
+let modalCurrent = 0;
+let modalTotal = 0;
+
+function openModal(index) {
+  const p = projects[index];
+  document.getElementById('modal-label').textContent = p.label;
+  document.getElementById('modal-title').innerHTML = p.title;
+  document.getElementById('modal-desc').innerHTML = p.desc;
+
+  const track = document.getElementById('modal-track');
+  track.innerHTML = '';
+  modalTotal = p.slides.length;
+  modalCurrent = 0;
+
+  p.slides.forEach(slide => {
+    const div = document.createElement('div');
+    div.className = 'proj-modal-slide' + (slide.type === 'placeholder' ? ' placeholder' : '');
+    if (slide.type === 'placeholder') {
+      div.setAttribute('data-text', slide.text);
+      const span = document.createElement('span');
+      span.textContent = slide.text;
+      div.appendChild(span);
+      if (slide.url) {
+        const a = document.createElement('a');
+        a.href = slide.url;
+        a.target = '_blank';
+        a.textContent = '↗ Otevřít web';
+        div.appendChild(a);
+      }
+    } else {
+      const img = document.createElement('img');
+      img.src = slide.src;
+      img.alt = slide.text || '';
+      div.appendChild(img);
+      if (slide.url) {
+        const a = document.createElement('a');
+        a.href = slide.url;
+        a.target = '_blank';
+        a.textContent = '↗ Otevřít web';
+        div.appendChild(a);
+      }
+    }
+    track.appendChild(div);
+  });
+
+  document.getElementById('modal-total').textContent = modalTotal;
+  document.getElementById('modal-current').textContent = 1;
+  track.style.transform = 'translateX(0)';
+
+  document.getElementById('proj-modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
 }
-function testimonialNext() { testimonialGo((testimonialCurrent + 1) % testimonialTotal); }
-function testimonialPrev() { testimonialGo((testimonialCurrent - 1 + testimonialTotal) % testimonialTotal); }
+
+function closeModal(e) {
+  if (e && e.target !== document.getElementById('proj-modal') && !e.target.classList.contains('proj-modal-close')) return;
+  document.getElementById('proj-modal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function modalSlide(dir) {
+  modalCurrent = (modalCurrent + dir + modalTotal) % modalTotal;
+  document.getElementById('modal-track').style.transform = `translateX(-${modalCurrent * 100}%)`;
+  document.getElementById('modal-current').textContent = modalCurrent + 1;
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeModal({target: document.getElementById('proj-modal')});
+  if (e.key === 'ArrowRight') modalSlide(1);
+  if (e.key === 'ArrowLeft') modalSlide(-1);
+});
+
+// ── TESTIMONIAL SLIDER ──
+let tCurrent = 0;
+const tTotal = 2;
+const tTrack = document.getElementById('testimonial-track');
+const tDots = document.querySelectorAll('.testimonial-dot');
+const tCounter = document.getElementById('t-current');
+
+function updateTestimonial() {
+  tTrack.style.transform = `translateX(-${tCurrent * 100}%)`;
+  tDots.forEach((d, i) => d.classList.toggle('active', i === tCurrent));
+  if (tCounter) tCounter.textContent = tCurrent + 1;
+}
+function slideTestimonial(dir) {
+  tCurrent = (tCurrent + dir + tTotal) % tTotal;
+  updateTestimonial();
+}
+function goToTestimonial(i) {
+  tCurrent = i;
+  updateTestimonial();
+}
 
 // ── CURSOR ──
 const cursor = document.getElementById('cursor');
@@ -1124,22 +1374,7 @@ document.querySelectorAll('a, .proj-card, .exp-header, .skill-row, .tag').forEac
   el.addEventListener('mouseleave', () => document.body.classList.remove('cur-big'));
 });
 
-// ── TESTIMONIAL SLIDER ──
-let tCurrent = 0;
-const tTotal = 3;
-const tTrack = document.getElementById('testimonial-track');
-const tDots = document.querySelectorAll('.testimonial-dot');
-const tCounter = document.getElementById('t-current');
 
-function updateTestimonial() {
-  tTrack.style.transform = `translateX(-${tCurrent * 100}%)`;
-  tDots.forEach((d, i) => d.classList.toggle('active', i === tCurrent));
-  tCounter.textContent = tCurrent + 1;
-}
-function slideTestimonial(dir) {
-  tCurrent = (tCurrent + dir + tTotal) % tTotal;
-  updateTestimonial();
-}
 function goToTestimonial(i) {
   tCurrent = i;
   updateTestimonial();
