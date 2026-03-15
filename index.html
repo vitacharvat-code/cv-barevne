@@ -357,6 +357,20 @@ nav {
 /* ── FOOTER ── */
 footer { border-top: 1px solid var(--border); padding: 2rem 3rem; display: flex; justify-content: space-between; align-items: center; font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem; color: rgba(255,255,255,0.2); letter-spacing: 0.1em; }
 
+.curriculum-text {
+  position: absolute;
+  bottom: 6px;
+  left: 50%;
+  transform: translateX(-28px);
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(1.5rem, 6vw, 4.5rem);
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(255,255,255,0.1);
+  white-space: nowrap;
+  pointer-events: none;
+  letter-spacing: 0.05em;
+}
+
 /* ── HAMBURGER ── */
 .hamburger {
   display: none;
@@ -648,12 +662,7 @@ footer { border-top: 1px solid var(--border); padding: 2rem 3rem; display: flex;
 
 
     <!-- CURRICULUM VITAE — samostatně mimo scale -->
-    <div style="position:absolute; bottom:6px; left:50%; transform:translateX(-28px); pointer-events:none; max-width:90vw; overflow:hidden;">
-      <svg viewBox="0 0 500 75" width="min(500px, 90vw)" height="auto" overflow="visible">
-        <text x="0" y="68" font-family="'Bebas Neue', sans-serif" font-size="68"
-          fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1.5">CURRICULUM VITAE</text>
-      </svg>
-    </div>
+    <div class="curriculum-text">CURRICULUM VITAE</div>
 
     <!-- FOOTBALLER -->
     <div class="footballer-wrap">
