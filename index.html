@@ -422,17 +422,20 @@ nav {
   font-size: 3rem; color: rgba(255,255,255,0.1);
 }
 .proj-modal-slide a {
-  position: absolute; inset: 0;
-  display: flex; align-items: flex-end;
-  padding: 1.5rem;
+  position: absolute;
+  bottom: 1.5rem; right: 1.5rem;
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  padding: 0.6rem 1.2rem;
   text-decoration: none;
-  background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
-  color: var(--fg);
+  background: var(--c1);
+  color: var(--bg);
   font-family: 'IBM Plex Mono', monospace;
   font-size: 0.7rem; letter-spacing: 0.1em;
-  opacity: 0; transition: opacity 0.3s;
+  font-weight: 700;
+  transition: all 0.3s;
+  opacity: 0.9;
 }
-.proj-modal-slide:hover a { opacity: 1; }
+.proj-modal-slide:hover a { opacity: 1; transform: translateY(-2px); }
 
 .proj-modal-nav {
   position: absolute; top: 50%; transform: translateY(-50%);
@@ -1205,12 +1208,15 @@ const projects = [
     ]
   },
   {
-    label: 'Web · StageArtCZ',
+    label: 'Web · Weby na míru',
     title: 'Webové stránky',
-    desc: 'Kompletní zajištění nových webových stránek — od koncepce a&nbsp;UX po copywriting a&nbsp;spuštění.',
+    desc: 'Kompletní zajištění webových stránek na míru — od koncepce a&nbsp;UX po obsah a&nbsp;spuštění.',
     slides: [
-      { type: 'placeholder', text: 'Screenshot webu', url: 'https://stageartcz.cz' },
-      { type: 'placeholder', text: 'Screenshot webu' },
+      { type: 'image', src: 'michalpavlik.jpg', text: 'michalpavlik.cz', url: 'https://michalpavlik.cz' },
+      { type: 'image', src: 'enoria.jpg', text: 'enoria.cz', url: 'https://enoria.cz' },
+      { type: 'image', src: 'masazemichna.jpg', text: 'masazemichna.cz', url: 'https://masazemichna.cz' },
+      { type: 'image', src: 'podhumnama.jpg', text: 'podhumnama.cz', url: 'https://podhumnama.cz' },
+      { type: 'image', src: 'barujoga.jpg', text: 'barujoga.cz', url: 'https://barujoga.cz' },
     ]
   },
   {
